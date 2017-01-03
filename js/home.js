@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import Swiper from 'react-native-swiper';
 
 import makeCancelable from './util/Cancelable';
-import ChinaNums from './util/Functions';
+import { ChinaNums } from './util/Functions';
 
 const GET_HOME_DATA = 'http://news-at.zhihu.com/api/4/news/latest'
 
@@ -46,8 +46,13 @@ export default class Home extends Component {
     var dd = new Date();
     var y = dd.getFullYear();
     var m = dd.getMonth() + 1;//获取当前月份的日期 
+    if (m < 10) {
+      m = '0' + m;
+    }
     var d = dd.getDate();
-
+    if (d < 10) {
+      d = '0' + d;
+    }
     this.setState({
       today: y + '' + m + '' + d,
     })
@@ -104,20 +109,8 @@ export default class Home extends Component {
         />
     );
   }
-  renderStory(story, section, row) {
-    // console.log('==========================');
-    // console.log(story);
-    // console.log(section, row)
-    return (
-      <View style={[styles.container, { flexDirection: 'row' }]}>
-        <Image source={{ uri: story.images[0] }} style={{ width: 80, height: 60 }} />
-        <Text style={{ flex: 1 }}> {story.title} </Text>
-      </View>
-    );
-  }
 
   renderStorySectionHeader(date, section) {
-
     if (this.state.today == section) {
       sectionTitle = "今日热文";
     } else {
@@ -131,12 +124,37 @@ export default class Home extends Component {
 
     console.log(sectionTitle, section, d, m);
 
-
     return (
       <View style={styles.section} >
-        <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 15,}}> {sectionTitle} </Text>
+        <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 15, }}> {sectionTitle} </Text>
       </View>
     );
+  }
+
+  renderStory(story, section, row) {
+
+    var rowView = (
+      <View style={[styles.container, { flexDirection: 'row' }]}>
+        <Image source={{ uri: story.images[0] }} style={{ width: 80, height: 60 }} />
+        <Text style={{ flex: 1 }}> {story.title} </Text>
+      </View>
+    );
+
+    if (section == this.state.today && row == 0) {
+      console.log('****** section 1， row 1 加入 slider header ******')
+      console.log(section, row)
+      return (
+        <View style={[styles.container, { flexDirection: 'row' }]}>
+          {rowView}
+        </View>
+      );
+    } else {
+      return (
+        <View style={[styles.container, { flexDirection: 'row' }]}>
+          {rowView}
+        </View>
+      );
+    }
   }
 
   render() {
@@ -265,11 +283,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#92BBD9',
   },
-  section: { 
+  section: {
     flex: 1,
-    backgroundColor: 'skyblue', 
-    height: 35, 
-    alignItems: 'center', 
+    backgroundColor: 'skyblue',
+    height: 35,
+    alignItems: 'center',
     justifyContent: 'center'
   },
 });

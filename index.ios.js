@@ -11,12 +11,4 @@ import {
 
 import Home from './js/home';
 
-export default class RN_ZhihuDailyDemo extends Component {
-  render() {
-    return (
-      <Home />
-    );
-  }
-}
-
-AppRegistry.registerComponent('RN_ZhihuDailyDemo', () => RN_ZhihuDailyDemo);
+AppRegistry.registerComponent('RN_ZhihuDailyDemo', () => Home);
